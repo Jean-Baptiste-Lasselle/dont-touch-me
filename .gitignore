@@ -1,0 +1,11 @@
+
+.DS_Store
+
+# Répertoires utilsiés par docker-compose
+db/
+gitlab/
+hubot/
+img/
+nginx/
+rocketchat/
+
