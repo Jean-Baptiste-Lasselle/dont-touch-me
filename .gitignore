@@ -3,7 +3,8 @@
 
 # Répertoires utilsiés par docker-compose
 db/
-gitlab/
+gitlab/config/
+gitlab/data/
 hubot/
 img/
 nginx/

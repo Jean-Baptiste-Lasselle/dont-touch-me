@@ -1,3 +1,33 @@
+# Dernière erreur
+
+J'aidonc commenté de tout ce qui relève d'une configuration spéficique réseau Docker, pour reconstruire l'intégration des composants.
+
+La dernière erreur sur laquelle je suis est : 
+
+```bash
+[jibl@pc-100 testaeffacer]$ docker ps -a
+CONTAINER ID        IMAGE                                COMMAND                  CREATED             STATUS                            PORTS                                                                         NAMES
+0d66b8854ea7        rocketchat/hubot-rocketchat:latest   "/bin/sh -c 'node -e…"   6 seconds ago       Up 5 seconds                      0.0.0.0:3001->3001/tcp                                                        testaeffacer_hubot_1
+e8271658413c        nginx                                "nginx -g 'daemon of…"   6 seconds ago       Up 5 seconds                      0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp, 0.0.0.0:2332->2332/tcp              proxy
+7b68c0658639        rocketchat/rocket.chat:latest        "node main.js"           7 seconds ago       Up 6 seconds                      0.0.0.0:3000->3000/tcp                                                        testaeffacer_rocketchat_1
+0396faa09c66        dorgamit/gitlab-runner:latest        "/usr/bin/dumb-init …"   7 seconds ago       Up 6 seconds                      0.0.0.0:8000->8000/tcp                                                        testaeffacer_runner_1
+148c91f772c1        mongo:3.2                            "docker-entrypoint.s…"   7 seconds ago       Exited (1) 6 seconds ago                                                                                        testaeffacer_mongo-init-replica_1
+9d6e5f442395        mongo:3.2                            "docker-entrypoint.s…"   8 seconds ago       Up 7 seconds                      27017/tcp                                                                     testaeffacer_mongo_1
+43b6b852402d        gitlab/gitlab-ce:latest              "/assets/wrapper"        8 seconds ago       Up 7 seconds (health: starting)   80/tcp, 0.0.0.0:8081->8081/tcp, 0.0.0.0:2222->22/tcp, 0.0.0.0:4443->443/tcp   testaeffacer_gitlab_1
+[jibl@pc-100 testaeffacer]$ docker logs testaeffacer_mongo-init-replica_1
+MongoDB shell version: 3.2.20
+connecting to: mongo/rocketchat
+2018-08-17T03:13:39.722+0000 W NETWORK  [thread1] Failed to connect to 192.168.80.3:27017, in(checking socket for error after poll), reason: errno:111 Connection refused
+2018-08-17T03:13:39.722+0000 E QUERY    [thread1] Error: couldn't connect to server mongo:27017, connection attempt failed :
+connect@src/mongo/shell/mongo.js:231:14
+@(connect):1:6
+
+exception: connect failed
+[jibl@pc-100 testaeffacer]$ 
+
+```
+
+
 # ChatOps with Rocket.Chat
 ## Inspired in Gitlab: "From Idea to Production"
 
