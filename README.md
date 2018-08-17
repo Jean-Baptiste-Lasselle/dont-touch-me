@@ -1,3 +1,9 @@
+# Utilisation
+
+```bash
+docker-compose down && docker system prune -f && docker-compose build && docker-compose up -d
+```
+
 # Dernière erreur
 
 J'aidonc commenté de tout ce qui relève d'une configuration spéficique réseau Docker, pour reconstruire l'intégration des composants.
