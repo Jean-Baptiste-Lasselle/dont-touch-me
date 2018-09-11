@@ -7,6 +7,15 @@ source :
 
 https://github.com/RocketChat/Chat.Code.Ship
 
+Ok, les tests préliminaires m'amènent à conclure, qu'il faut "réparer" la configuration réseau docker-compose, afin de pouvoir utiliser la recette. Une configuration plus fine, devrait pêtre orchestrée par un Ansible / Terraform.
+
+
+Pour débogguer cette recette, j'ai utilisé :
+```bash
+docker-compose down --rmi all && docker system prune -f && docker-compose --verbose build && docker-compose --verbose up -d
+```
+
+
 # Dernière erreur
 
 J'aidonc commenté de tout ce qui relève d'une configuration spéficique réseau Docker, pour reconstruire l'intégration des composants.
