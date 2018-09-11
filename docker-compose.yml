@@ -8,28 +8,28 @@ services:
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'http://git.dorgam.it/'
-        gitlab_rails['gitlab_shell_ssh_port'] = 2232
+        gitlab_rails['gitlab_shell_ssh_port'] = 22
         gitlab_rails['lfs_enabled'] = true
         nginx['listen_port'] = 8081
     ports:
       - "8081:8081"
       - "4443:443"
       - "2222:22"
-#    expose:
-#      - "3000"
-#      - "8080"
-#      - "4443"
-#      - "2222"
-#      - "80"
-#      - "22"
-#      - "443"
+    expose:
+      - "3000"
+      - "8080"
+      - "4443"
+      - "2222"
+      - "80"
+      - "22"
+      - "443"
     volumes:
       - ./gitlab/config:/etc/gitlab
       - ./gitlab/logs:/var/log/gitlab
       - ./gitlab/data:/var/opt/gitlab
-#    networks:
-#      devops:
-#        ipv4_address: 172.20.0.4
+    networks:
+      devops:
+        ipv4_address: 192.168.160.4
 
   runner:
     build: ./gitlab/runner/
@@ -46,9 +46,9 @@ services:
       - "8000:8000"
     expose:
       - "8000"
-#    networks:
-#      devops:
-#        ipv4_address: 172.20.0.5
+    networks:
+      devops:
+        ipv4_address: 192.168.160.5
 
   mongo:
     image: mongo:3.2
@@ -57,15 +57,17 @@ services:
      - ./db/data:/data/db
      - ./db/dump:/dump
     command: mongod --smallfiles --oplogSize 128 --replSet rs0
-#    networks:
-#      devops:
-#        ipv4_address: 172.20.0.6
+    networks:
+      devops:
+        ipv4_address: 192.168.160.6
 
   mongo-init-replica:
     image: mongo:3.2
     command: 'mongo mongo/rocketchat --eval "rs.initiate({ _id: ''rs0'', members: [ { _id: 0, host: ''localhost:27017'' } ]})"'
     links:
       - mongo:mongo
+    networks:
+      - devops
 
   rocketchat:
     image: rocketchat/rocket.chat:latest
@@ -87,9 +89,9 @@ services:
       - "3000"
     depends_on:
       - mongo
-#    networks:
-#      devops:
-#        ipv4_address: 172.20.0.8
+    networks:
+      devops:
+        ipv4_address: 192.168.160.8
 
   # hubot, the popular chatbot (add the bot user first and change the password before starting this image)
   hubot:
@@ -117,42 +119,47 @@ services:
     ports:
       - 3001:3001
     # this is used to expose the hubot port for notifications on the host on port 3001, e.g. for hubot-jenkins-notifier
-#    networks:
-#      devops:
-#        ipv4_address: 172.20.0.9
+    networks:
+      devops:
+        ipv4_address: 192.168.160.9
 
   nginx:
     image: nginx
-#    hostname: "proxy"
-    container_name: proxy
+    hostname: "proxy"
     volumes:
       - ./nginx/chatops.conf:/etc/nginx/conf.d/chatops.conf
       - ./nginx/hosts:/etc/hosts
       - ./nginx/logs:/var/log/nginx
       - ./nginx/certificates:/etc/nginx/certificates/
     ports:
-      - "80:80"
+      - "80:8080"
       - "443:443"
-      - "2332:2332"
-#    expose:
-#      - "3000"
-#      - "80"
-#      - "443"
-#      - "22"
+      - "22:22"
+    expose:
+      - "3000"
+      - "80"
+      - "443"
+      - "22"
     environment:
       - NGINX_HOST=dorgam.it
       - GIT_HOST=git.dorgam.it
       - CHAT_HOST=chat.dorgam.it
       - NGINX_PORT=80
       - NGINX_SSL=443
-      - NGINX_SSH=2332
+      - NGINX_SSH=22
     links:
       - rocketchat:rocketchat
       - gitlab:gitlab
-#    networks:
-#      devops:
-#        ipv4_address: 172.20.0.10
+    networks:
+      devops:
+        ipv4_address: 192.168.160.10
 
-# networks:
-#  devops:
-#    driver: bridge
+networks:
+  devops:
+    driver: bridge
+#    external: true 
+    ipam:
+      config:
+        - subnet: 192.168.160.0/24
+        - gateway: 192.168.160.1
+        # - gateway: 172.16.1.1
