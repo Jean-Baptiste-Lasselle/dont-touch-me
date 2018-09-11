@@ -3,6 +3,9 @@
 ```bash
 docker-compose down && docker system prune -f && docker-compose build && docker-compose up -d
 ```
+source : 
+
+https://github.com/RocketChat/Chat.Code.Ship
 
 # Dernière erreur
 
