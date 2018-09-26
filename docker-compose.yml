@@ -4,7 +4,8 @@ services:
   gitlab:
     image: 'gitlab/gitlab-ce:latest'
     restart: always
-    hostname: "gitlab"
+    container_name: gitlab-prod
+#     hostname: "gitlab"
 #    environment:
 #      GITLAB_OMNIBUS_CONFIG: |
 #        external_url 'http://git.dorgam.it/'
